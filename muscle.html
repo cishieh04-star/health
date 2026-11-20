@@ -148,6 +148,30 @@
   .remind{margin-top:34px;padding:16px 18px;border-radius:12px;background:rgba(0,0,0,.18);font-size:17px;line-height:1.8;color:rgba(250,246,239,.85)}
   footer{background:#0c2e2b;color:rgba(250,246,239,.55);font-size:15px;text-align:center;padding:24px 22px 40px;line-height:1.8}
 
+
+  /* ===== Read aloud ===== */
+  .listen{display:inline-flex;align-items:center;gap:10px;margin-top:26px;border:none;cursor:pointer;
+    background:var(--coral);color:#fff;font-family:"Noto Sans TC",sans-serif;font-size:21px;font-weight:700;letter-spacing:.08em;
+    padding:14px 26px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  .listen:active{transform:scale(.97)}
+  .listen .time{font-weight:400;font-size:16px;opacity:.9}
+  .player{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(12,46,43,.97);color:var(--cream);
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:none;box-shadow:0 -6px 20px rgba(0,0,0,.2)}
+  .player.on{display:block}
+  .player .inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:8px}
+  .player button{flex:none;border:none;cursor:pointer;border-radius:999px;font-family:"Noto Sans TC",sans-serif;color:var(--cream);background:rgba(255,255,255,.12);height:48px;min-width:48px;font-size:20px}
+  .player .main{background:var(--coral);min-width:64px;height:56px;font-size:24px}
+  .player .spd{font-size:16px;padding:0 12px}
+  .player .prog{flex:1;min-width:0;font-size:14px;color:rgba(250,246,239,.75);text-align:center;line-height:1.4}
+  .player .bar{height:4px;background:rgba(255,255,255,.15);border-radius:4px;margin-top:5px;overflow:hidden}
+  .player .bar i{display:block;height:100%;width:0;background:var(--coral-soft);transition:width .3s}
+  .reading{background:rgba(217,100,58,.15)!important;box-shadow:0 0 0 8px rgba(217,100,58,.15);border-radius:8px}
+  .dark .reading,.cover .reading{background:rgba(244,199,174,.18)!important;box-shadow:0 0 0 8px rgba(244,199,174,.18)}
+  .tts-msg{position:fixed;left:16px;right:16px;bottom:90px;z-index:21;max-width:600px;margin:0 auto;background:#fff;color:var(--text);
+    border-radius:14px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:18px;line-height:1.7;display:none}
+  .tts-msg.on{display:block}
+  .tts-msg button{margin-top:10px;border:none;background:var(--teal);color:#fff;border-radius:999px;padding:6px 18px;font-size:17px}
+  body.playing footer{padding-bottom:110px}
   .js .rv{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s ease}
   .js .rv.in{opacity:1;transform:none}
   @media (max-width:400px){ body{font-size:20px} .picto .big{font-size:50px} }
@@ -184,6 +208,7 @@
     <div class="kicker">肌肉的祕密</div>
     <h1>如何讓<em>肌肉</em><br>幫你抗老化？</h1>
     <p class="sub">從 <b>大重量訓練</b> 到 <b>枯木逢春法</b></p>
+    <button class="listen" id="listenBtn">🔊 聽全文朗讀 <span class="time" id="listenTime"></span></button>
   </div>
 
   <blockquote class="verse">
@@ -255,7 +280,7 @@
           <circle cx="48" cy="14" r="7"/><path d="M46 24l-6 22 10 10-2 22"/><path d="M40 46l-10 30"/><path d="M44 30l-12 10M46 30l12 8"/>
         </svg>
         <b>活動</b><span class="en">Physical Activity</span>
-        <p>走路、逛街<br>做家事<br>只能維持現狀</p>
+        <p>走路、逛街、<br>做家事，<br>只能維持現狀</p>
       </div>
       <div class="c e">
         <svg viewBox="0 0 90 90" fill="none" stroke="#d9643a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -263,7 +288,7 @@
           <path d="M14 24h26M50 24h26"/><rect x="8" y="16" width="8" height="16" rx="2" fill="#d9643a"/><rect x="74" y="16" width="8" height="16" rx="2" fill="#d9643a"/>
         </svg>
         <b>運動</b><span class="en">Exercise</span>
-        <p>超過現有負荷<br>的訓練<br>肌肉才會成長</p>
+        <p>超過現有負荷<br>的訓練，<br>肌肉才會成長</p>
       </div>
     </div>
 
@@ -277,7 +302,7 @@
         <div><b>訓練過的肌肉</b><span>分泌肌肉激素 ↓</span></div>
       </div>
       <div class="organs">
-        <div class="hot"><b>🧠 大腦</b><span>神經再生<br>預防失智</span></div>
+        <div class="hot"><b>🧠 大腦</b><span>神經再生、<br>預防失智</span></div>
         <div><b>🟤 肝臟</b><span>調節<br>代謝</span></div>
         <div><b>🩸 胰臟</b><span>穩定<br>血糖</span></div>
         <div><b>🛡️ 免疫</b><span>增強<br>抵抗力</span></div>
@@ -322,7 +347,7 @@
     <div class="cells rv">
       <div>
         <svg viewBox="0 0 54 54"><path d="M27 6c10 0 18 6 20 15 2 8-3 12-1 19-6 8-18 9-26 5C11 41 6 33 7 24 8 13 16 6 27 6z" fill="#d9643a" opacity=".85"/><circle cx="24" cy="26" r="7" fill="#12403c"/><circle cx="38" cy="18" r="3" fill="#faf6ef"/><circle cx="36" cy="36" r="2.5" fill="#faf6ef"/></svg>
-        <b>巨噬細胞</b><span>增強「吞噬」<br>清除壞東西</span>
+        <b>巨噬細胞</b><span>增強「吞噬」，<br>清除壞東西</span>
       </div>
       <div>
         <svg viewBox="0 0 54 54" fill="none" stroke="#f4c7ae" stroke-width="2.4" stroke-linecap="round"><circle cx="27" cy="27" r="14" fill="#1d5a53"/><path d="M27 13V5M27 49v-8M13 27H5M49 27h-8"/><path d="M24 5l3 -3 3 3M24 49l3 3 3-3M5 24l-3 3 3 3M49 24l3 3-3 3"/></svg>
@@ -448,6 +473,17 @@
   </div>
 </section>
 
+<div class="player" id="player" role="region" aria-label="朗讀播放器">
+  <div class="inner">
+    <button id="pPrev" aria-label="上一段">⏮</button>
+    <button class="main" id="pPlay" aria-label="暫停或繼續">⏸</button>
+    <button id="pNext" aria-label="下一段">⏭</button>
+    <div class="prog"><span id="pText">準備朗讀…</span><div class="bar"><i id="pBar"></i></div></div>
+    <button class="spd" id="pSpd" aria-label="朗讀速度">正常</button>
+    <button id="pStop" aria-label="停止朗讀">✕</button>
+  </div>
+</div>
+<div class="tts-msg" id="ttsMsg"></div>
 <footer>本文為一般健康資訊分享，不能取代醫療診斷與專業指導。</footer>
 
 <script>
@@ -481,6 +517,140 @@
       document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
     }catch(e){}
   })();
+/* ===== 全文朗讀 ===== */
+(function(){
+  var SEL = 'h1, .cover .sub, .verse, h2, h3, .strat .tag, .fig-title, .pop-note, .picto .box, .caption, p, .callout .q, .vs .c, .hub, .organs > div, .cells > div, .benefit-list li, .story, .dodont > div, .pillars > div, .closing, .remind, footer';
+  var synth = window.speechSynthesis;
+  var btn = document.getElementById('listenBtn'), player = document.getElementById('player');
+  var pPlay = document.getElementById('pPlay'), pSpd = document.getElementById('pSpd'),
+      pText = document.getElementById('pText'), pBar = document.getElementById('pBar'), msg = document.getElementById('ttsMsg');
+  var speeds = [{n:'慢',r:0.75},{n:'正常',r:0.95},{n:'快',r:1.15}], sp = 1;
+  var queue = [], blocks = [], idx = 0, playing = false, voice = null, token = 0;
+
+  function clean(el){
+    // 標出「自成一行」的小標題（例如卡片標題），朗讀時在後面停頓
+    el.querySelectorAll('*').forEach(function(x){
+      var d = getComputedStyle(x).display;
+      if (/^(block|flex|grid|list-item)$/.test(d)) x.setAttribute('data-tts-blk', '');
+    });
+    var c = el.cloneNode(true);
+    el.querySelectorAll('[data-tts-blk]').forEach(function(x){ x.removeAttribute('data-tts-blk'); });
+    c.querySelectorAll('svg, .en, .latin, .time, button').forEach(function(x){ x.remove(); });
+    c.querySelectorAll('h3 br').forEach(function(x){ x.replaceWith('，'); });
+    c.querySelectorAll('br').forEach(function(x){ x.remove(); });
+    c.querySelectorAll('[data-tts-blk]').forEach(function(x){ x.append('，'); });
+    if (el.tagName === 'H3') c.innerHTML = el.innerHTML.replace(/<br\s*\/?>/g, '，');
+    var t = c.textContent;
+    if (el.matches('.dodont .no')) t = '要避免：' + t;
+    if (el.matches('.dodont .yes')) t = '建議：' + t;
+    t = t.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{2190}-\u{21FF}]/gu, '')
+         .replace(/40:31/g, '四十章三十一節').replace(/——|—/g, '')
+         .replace(/(\d+(?:\.\d+)?)%～(\d+(?:\.\d+)?)%/g, '百分之$1到百分之$2')
+         .replace(/～/g, '到').replace(/IL-6/g, 'I L 6').replace(/\s+/g, ' ')
+         .replace(/\s*([，。！？：；、])\s*/g, '$1')
+         .replace(/([，。！？：；、])[，]+/g, '$1').replace(/，+/g, '，')
+         .replace(/^[，\s]+|[，\s]+$/g, '');
+    return t;
+  }
+
+  function build(){
+    var all = Array.prototype.slice.call(document.querySelectorAll(SEL));
+    blocks = all.filter(function(el){
+      if (el.closest('.player, .tts-msg')) return false;
+      for (var p = el.parentElement; p; p = p.parentElement) if (all.indexOf(p) > -1) return false;
+      return clean(el).length > 0;
+    });
+    queue = [];
+    blocks.forEach(function(el, bi){
+      var t = clean(el);
+      var parts = t.split(/(?<=[。！？；])/);
+      parts.forEach(function(s){
+        while (s.length > 70) {           // 太長的句子再切，避免瀏覽器中斷
+          var cut = s.lastIndexOf('，', 70); if (cut < 20) cut = 70;
+          queue.push({b:bi, t:s.slice(0, cut + 1)}); s = s.slice(cut + 1);
+        }
+        if (s.trim()) queue.push({b:bi, t:s});
+      });
+    });
+    var chars = queue.reduce(function(n,q){ return n + q.t.length; }, 0);
+    document.getElementById('listenTime').textContent = '約 ' + Math.max(1, Math.round(chars / 230)) + ' 分鐘';
+  }
+
+  function pickVoice(){
+    if (!synth) return;
+    var vs = synth.getVoices();
+    voice = vs.filter(function(v){ return /zh[-_]TW/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /zh[-_](HK|Hant)/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /^zh/i.test(v.lang); })[0] || null;
+  }
+
+  function mark(){
+    document.querySelectorAll('.reading').forEach(function(x){ x.classList.remove('reading'); });
+    var q = queue[idx]; if (!q) return;
+    var el = blocks[q.b]; el.classList.add('reading'); el.classList.add('in');
+    var r = el.getBoundingClientRect();
+    if (r.top < 60 || r.bottom > innerHeight - 110) el.scrollIntoView({behavior:'smooth', block:'center'});
+    var secNo = 0; blocks.slice(0, q.b + 1).forEach(function(b){ if (b.tagName === 'H2') secNo++; });
+    pText.textContent = secNo ? '第 ' + secNo + ' 部分・朗讀中' : '封面・朗讀中';
+    pBar.style.width = (idx / queue.length * 100) + '%';
+  }
+
+  function speakNext(){
+    if (!playing) return;
+    if (idx >= queue.length) { finish(); return; }
+    mark();
+    var my = ++token;
+    var u = new SpeechSynthesisUtterance(queue[idx].t);
+    u.lang = 'zh-TW'; if (voice) u.voice = voice; u.rate = speeds[sp].r;
+    u.onend = function(){ if (my !== token || !playing) return; idx++; speakNext(); };
+    u.onerror = function(e){ if (my !== token || !playing) return; if (e.error === 'interrupted' || e.error === 'canceled') return; idx++; speakNext(); };
+    synth.speak(u);
+  }
+
+  function play(){ playing = true; pPlay.textContent = '⏸'; synth.cancel(); speakNext(); }
+  function pause(){ playing = false; token++; synth.cancel(); pPlay.textContent = '▶'; pText.textContent = '已暫停・按 ▶ 繼續'; }
+  function finish(){
+    playing = false; pPlay.textContent = '▶'; pBar.style.width = '100%'; pText.textContent = '朗讀完畢，謝謝收聽';
+    document.querySelectorAll('.reading').forEach(function(x){ x.classList.remove('reading'); }); idx = 0;
+  }
+  function stop(){ playing = false; token++; synth.cancel(); player.classList.remove('on'); document.body.classList.remove('playing');
+    document.querySelectorAll('.reading').forEach(function(x){ x.classList.remove('reading'); }); }
+  function jump(d){
+    var cur = queue[idx] ? queue[idx].b : 0, target = Math.max(0, Math.min(blocks.length - 1, cur + d));
+    for (var i = 0; i < queue.length; i++) if (queue[i].b === target) { idx = i; break; }
+    if (playing) { token++; synth.cancel(); speakNext(); } else mark();
+  }
+
+  function noSupport(){
+    msg.innerHTML = '這個瀏覽器不支援朗讀功能 😢<br>請按右上角的「⋮」或「分享」，選擇<b>「用預設瀏覽器開啟」</b>（Chrome 或 Safari），就可以聽了。<br><button>知道了</button>';
+    msg.classList.add('on'); msg.querySelector('button').onclick = function(){ msg.classList.remove('on'); };
+  }
+
+  build();
+  if (synth) { pickVoice(); synth.onvoiceschanged = pickVoice; }
+
+  btn.addEventListener('click', function(){
+    if (!synth || !window.SpeechSynthesisUtterance) { noSupport(); return; }
+    player.classList.add('on'); document.body.classList.add('playing'); idx = 0; play();
+  });
+  pPlay.addEventListener('click', function(){ playing ? pause() : play(); });
+  document.getElementById('pPrev').addEventListener('click', function(){ jump(-1); });
+  document.getElementById('pNext').addEventListener('click', function(){ jump(1); });
+  document.getElementById('pStop').addEventListener('click', stop);
+  pSpd.addEventListener('click', function(){
+    sp = (sp + 1) % speeds.length; pSpd.textContent = speeds[sp].n;
+    if (playing) { token++; synth.cancel(); speakNext(); }
+  });
+  // 點任何一段文字，就從那裡開始朗讀（播放器開著時）
+  document.addEventListener('click', function(e){
+    if (!player.classList.contains('on') || e.target.closest('.player, button, a')) return;
+    var el = e.target.closest(SEL); if (!el) return;
+    var bi = blocks.indexOf(el); while (bi < 0 && el.parentElement) { el = el.parentElement.closest(SEL); if (!el) return; bi = blocks.indexOf(el); }
+    for (var i = 0; i < queue.length; i++) if (queue[i].b === bi) { idx = i; break; }
+    token++; synth.cancel(); playing = true; pPlay.textContent = '⏸'; speakNext();
+  });
+  window.addEventListener('pagehide', function(){ if (synth) synth.cancel(); });
+})();
 </script>
 </body>
 </html>
