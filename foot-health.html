@@ -313,12 +313,20 @@ p.rd{margin:6px -8px}
 <script>
 const blocks = Array.from(document.querySelectorAll('.rd'));
 const synth = window.speechSynthesis;
-let queue = [], qi = 0, playing = false, paused = false, token = 0, rate = 0.9, voice = null;
+let lastCut = 0, queue = [], qi = 0, playing = false, paused = false, token = 0, rate = 0.9, voice = null;
 
+/* 從 LINE 打開：自動改用手機瀏覽器（LINE 裡常常沒有聲音） */
+(function(){try{if(/\bLine\//i.test(navigator.userAgent)&&!/openExternalBrowser=1/.test(location.search)){location.replace(location.href.replace(/#.*$/,'')+(location.search?'&':'?')+'openExternalBrowser=1'+location.hash)}}catch(e){}})();
+const IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+/* 選聲音：iPhone 新系統有很多「特效聲音」（Eddy、Flo、Grandma、Rocko…），聽起來模糊、像機器人，一律不用；
+   優先用台灣的「美佳」，有下載加強版就用加強版；不用香港粵語的聲音 */
 function pickVoice(){
-  const vs = synth ? synth.getVoices() : [];
-  voice = vs.find(v=>/zh[-_]TW/i.test(v.lang)) || vs.find(v=>/zh[-_]HK/i.test(v.lang)) ||
-          vs.find(v=>/^zh/i.test(v.lang)) || null;
+  const vs = synth ? (synth.getVoices()||[]) : [];
+  const BAD=/eloquence|speech\.synthesis\.voice|Eddy|Flo\b|Grandma|Grandpa|Reed|Rocko|Sandy|Shelley|Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Good News|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Fred|Junior|Kathy|Ralph|奶奶|爺爺/i;
+  const L=v=>(v.lang||'').replace('_','-');
+  const best=(re,good)=>{let b=null,bs=-1;vs.forEach(v=>{if(!re.test(L(v))||BAD.test((v.voiceURI||'')+' '+v.name))return;
+    let s=1;if(good&&good.test(v.name))s+=10;if(/premium|enhanced|高品質|增強/i.test((v.voiceURI||'')+v.name))s+=5;if(v.localService)s+=1;if(s>bs){bs=s;b=v}});return b};
+  voice = best(/^zh-TW/i,/Mei-?Jia|美佳|Hanhan|Yating|Taiwan|台灣|臺灣/i) || best(/^(zh-CN|cmn)/i,/Ting-?Ting|婷婷|Xiaoxiao/i) || null;
 }
 if (synth){ pickVoice(); synth.onvoiceschanged = pickVoice; }
 
@@ -338,15 +346,27 @@ function speakCurrent(){
   const t = textOf(el);
   setStatus('正在朗讀：' + t);
   const u = new SpeechSynthesisUtterance(t);
-  u.lang = 'zh-TW'; u.rate = rate; if (voice) u.voice = voice;
+  u.lang = 'zh-TW'; u.rate = rate; u.pitch = 1; if (voice) u.voice = voice;
   u.onend = () => { if (my !== token || !playing || paused) return; qi++; setTimeout(speakCurrent, 250); };
-  u.onerror = u.onend;
-  synth.speak(u);
+  let started=false; u.onstart=()=>{started=true};
+  u.onerror = e => { const er=(e&&e.error)||''; if(!started && !u._retry && !/interrupted|canceled/.test(er) && my===token){ sayRetry(t,my); return; } u.onend(); };
+  const go=()=>{ if(my!==token) return; try{ if(!IOS||synth.paused) synth.resume(); }catch(e){} synth.speak(u);
+    setTimeout(()=>{ if(!started && my===token && playing && !paused) sayRetry(t,my); },2500); };
+  const wait=Date.now()-lastCut<400 ? 350 : 0; wait ? setTimeout(go,wait) : go();
+}
+// 唸不出來時：停掉，改用手機預設的聲音再唸一次
+function sayRetry(t,my){
+  if(my!==token) return; try{synth.cancel()}catch(e){} lastCut=Date.now();
+  setTimeout(()=>{ if(my!==token) return;
+    const u=new SpeechSynthesisUtterance(t); u._retry=1; u.lang='zh-TW'; u.rate=rate; u.pitch=1;
+    u.onend=()=>{ if(my!==token||!playing||paused) return; qi++; setTimeout(speakCurrent,250); }; u.onerror=u.onend;
+    synth.speak(u); },350);
 }
 
 function startQueue(list, start){
+  if (synth && !voice) pickVoice();
   if (!synth){ alert('這個瀏覽器不支援朗讀，請改用 Chrome 或 Safari 開啟。'); return; }
-  token++; synth.cancel();
+  token++; synth.cancel(); lastCut=Date.now();
   queue = list; qi = start || 0; playing = true; paused = false;
   updateButtons(); speakCurrent();
 }
@@ -355,10 +375,10 @@ function playSection(id){ startQueue(Array.from(document.getElementById(id).quer
 function togglePause(){
   if (!playing && !paused){ playAll(); return; }
   if (paused){ paused = false; playing = true; updateButtons(); speakCurrent(); }   // 從本段重新唸起
-  else { paused = true; token++; synth.cancel(); updateButtons(); setStatus('已暫停，按「繼續」接著唸'); }
+  else { paused = true; token++; synth.cancel(); lastCut=Date.now(); updateButtons(); setStatus('已暫停，按「繼續」接著唸'); }
 }
 function stopAll(){
-  token++; if (synth) synth.cancel();
+  token++; if (synth) synth.cancel(); lastCut=Date.now();
   playing = false; paused = false; clearNow(); updateButtons();
   setStatus('點任何一段文字，就會從那裡開始唸');
 }
@@ -373,7 +393,7 @@ rateEl.addEventListener('input', () => {
   rate = parseFloat(rateEl.value);
   document.getElementById('rateTxt').textContent = rate.toFixed(1);
 });
-rateEl.addEventListener('change', () => { if (playing && !paused){ token++; synth.cancel(); speakCurrent(); } });
+rateEl.addEventListener('change', () => { if (playing && !paused){ token++; synth.cancel(); lastCut=Date.now(); speakCurrent(); } });
 
 let fs = 19;
 function fontSize(d){ fs = Math.min(28, Math.max(15, fs + d*2)); document.documentElement.style.setProperty('--fs', fs+'px'); }
