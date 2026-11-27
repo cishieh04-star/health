@@ -17,7 +17,7 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-  font-size:var(--fs);line-height:1.9;padding-bottom:170px}
+  font-size:var(--fs);line-height:1.9;padding-bottom:240px}
 h1,h2,h3{font-family:"Noto Serif TC","Noto Serif CJK TC","PMingLiU",serif;line-height:1.4}
 .wrap{max-width:860px;margin:0 auto;padding:0 16px}
 b{color:#0f4f57}
@@ -106,6 +106,7 @@ p.rd{margin:8px 0}
 .pbtn:disabled{opacity:.4}
 .speed{display:flex;align-items:center;gap:6px;font-size:16px}
 .speed input{width:110px;accent-color:var(--gold)}
+.player select{font-size:16px;padding:6px 8px;border-radius:10px;border:none;max-width:200px;font-family:inherit}
 .status{text-align:center;font-size:14px;opacity:.8;margin:4px auto 0;max-width:860px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
@@ -175,6 +176,7 @@ p.rd{margin:8px 0}
       <li>用手指<b>點任何一段文字</b>，就會從那一段開始唸，畫面會跟著捲動。</li>
       <li>畫面最下方是控制列：<span class="key">⏸ 暫停</span> <span class="key">▶ 繼續</span> <span class="key">⏹ 停止</span>，拉動 <span class="key">🐢 速度 🐇</span> 可調慢或調快。</li>
       <li>字太小？按控制列的 <span class="key">字＋</span> <span class="key">字－</span> 調整大小。</li>
+      <li>覺得聲音不好聽或太吵？用控制列的 <span class="key">🗣️ 聲音</span> 換一個你喜歡的聲音，或用 <span class="key">🔈 音量 🔊</span> 調小聲。</li>
       <li>按了沒聲音？請確認手機<b>不是靜音</b>、音量已打開；用 LINE 打開沒聲音時，請點右上角改用<b>手機瀏覽器</b>開啟。</li>
     </ol>
   </div>
@@ -545,10 +547,21 @@ p.rd{margin:8px 0}
     <div class="speed">🐢<input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9">🐇 <span id="rateTxt">0.9</span></div>
     <button class="pbtn" onclick="fontSize(-1)">字－</button><button class="pbtn" onclick="fontSize(1)">字＋</button>
   </div>
+  <div class="row" style="margin-top:6px">
+    <label class="speed">🗣️ 聲音 <select id="voiceSel"><option>自動選擇</option></select></label>
+    <div class="speed">🔈<input type="range" id="vol" min="0.3" max="1" step="0.1" value="0.8">🔊</div>
+  </div>
   <div class="status" id="status">點任何一段文字，就會從那裡開始唸</div>
 </div>
 
 <script>
+(function(){
+  var ua = navigator.userAgent || '';
+  if (/\bLine\//i.test(ua) && !/openExternalBrowser=1/.test(location.search)) {
+    var u = location.href.replace(/#.*$/, '');
+    location.replace(u + (u.indexOf('?') < 0 ? '?' : '&') + 'openExternalBrowser=1' + location.hash);
+  }
+})();
 /* ===== 朗讀引擎：短句分段、只用中文語音、過濾符號，避免各裝置出現怪聲 ===== */
 const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
 const blocks = Array.from(document.querySelectorAll('.rd'));
@@ -556,13 +569,35 @@ const blocks = Array.from(document.querySelectorAll('.rd'));
 (function(){ const t = document.getElementById('coverTitle'); blocks.splice(blocks.indexOf(t), 1); blocks.unshift(t); })();
 let voice = null, rate = 0.9, chunks = [], ci = 0, playing = false, paused = false, token = 0;
 
+function normLang(l){ return (l || '').replace(/_/g, '-'); }
+let zhVoices = [], chosenName = '';
+try { chosenName = localStorage.getItem('voiceName') || ''; } catch(e) {}
+function voiceScore(v){
+  const l = normLang(v.lang), n = v.name || '';
+  let sc = 0;
+  if (/TW/i.test(l)) sc += 50; else if (/CN|Hans|cmn/i.test(l)) sc += 20;
+  if (/HK|yue/i.test(l)) sc -= 100;                                    // 粵語
+  if (/Natural|Neural|Online/i.test(n)) sc += 45;                      // Edge 自然語音
+  if (/Google/i.test(n)) sc += 30;                                     // Chrome／Android Google 語音
+  if (/Mei-?Jia|美佳|Premium|Enhanced|Siri|進階|高品質/i.test(n)) sc += 40;  // iPhone 較自然的語音
+  if (/Hanhan|Yating|Zhiwei|Desktop|eSpeak|espeak/i.test(n)) sc -= 30; // 機器味較重
+  return sc;
+}
+function friendly(v){
+  return (v.name || '').replace(/Microsoft\s*/i,'').replace(/\s*\(Natural\)|\s*Online/ig,'')
+    .replace(/\s*-\s*Chinese.*$/i,'').trim() + (/臺灣|台灣|Taiwan|大陸|中國|China/i.test(v.name) ? '' : /TW/i.test(normLang(v.lang)) ? '（台灣）' : /CN/i.test(normLang(v.lang)) ? '（大陸）' : '');
+}
 function pickVoice(){
   if (!synth) return;
-  const vs = synth.getVoices();
-  const zh = vs.filter(v => /^zh|cmn/i.test(v.lang));
-  // 優先台灣國語，其次普通話；避免粵語（zh-HK）造成怪腔調
-  voice = zh.find(v => /TW/i.test(v.lang) && v.localService) || zh.find(v => /TW/i.test(v.lang)) ||
-          zh.find(v => /CN|Hans|cmn/i.test(v.lang)) || zh.find(v => !/HK|yue/i.test(v.lang)) || null;
+  const vs = synth.getVoices() || [];
+  zhVoices = vs.filter(v => /^(zh|cmn)/i.test(normLang(v.lang)) && !/HK|yue/i.test(normLang(v.lang)))
+               .sort((a, b) => voiceScore(b) - voiceScore(a));
+  voice = zhVoices.find(v => v.name === chosenName) || zhVoices[0] || null;
+  const sel = document.getElementById('voiceSel');
+  if (sel){
+    sel.innerHTML = zhVoices.length ? '' : '<option>手機預設</option>';
+    zhVoices.forEach((v, i) => { const o = document.createElement('option'); o.value = i; o.textContent = friendly(v); if (v === voice) o.selected = true; sel.appendChild(o); });
+  }
 }
 if (synth){ synth.cancel(); pickVoice(); if ('onvoiceschanged' in synth) synth.onvoiceschanged = pickVoice; }
 
@@ -582,7 +617,7 @@ function clean(t){
 }
 function split(t){
   const out = [];
-  t.split(/(?<=[。！？；])/).forEach(s => {
+  t.replace(/([。！？；])/g, '$1\n').split('\n').forEach(s => {
     s = s.trim(); if (!s) return;
     while (s.length > 48){                      // 太長的句子在逗號處切開，避免 Chrome 唸到一半中斷
       let cut = s.lastIndexOf('，', 46); if (cut < 10) cut = 46;
@@ -605,6 +640,7 @@ function updateButtons(){
 }
 function inView(el){ const r = el.getBoundingClientRect(); return r.top > 60 && r.bottom < innerHeight - 150; }
 
+let keep = [], useVoice = true, errCount = 0, watchdog = null, retry = 0;
 function speakNext(){
   if (!playing) return;
   if (ci >= chunks.length){ stopAll(); setStatus('朗讀完畢，謝謝收聽'); return; }
@@ -612,21 +648,49 @@ function speakNext(){
   if (!inView(el)) el.scrollIntoView({behavior:'smooth', block:'center'});
   setStatus('正在朗讀：' + t);
   const u = new SpeechSynthesisUtterance(t);
-  u.lang = voice ? voice.lang : 'zh-TW'; if (voice) u.voice = voice;
-  u.rate = rate; u.pitch = 1; u.volume = 1;
-  const next = () => { if (my !== token || !playing) return; ci++; setTimeout(speakNext, 180); };
+  u.lang = (useVoice && voice) ? normLang(voice.lang) : 'zh-TW';
+  if (useVoice && voice) u.voice = voice;
+  u.rate = rate; u.pitch = 1; u.volume = vol;
+  keep.push(u); if (keep.length > 5) keep.shift();          // Android：避免語句被回收，唸完一句就停住
+  let started = false;
+  u.onstart = () => { started = true; errCount = 0; retry = 0; clearTimeout(watchdog); };
+  const next = () => { clearTimeout(watchdog); if (my !== token || !playing) return; ci++; setTimeout(speakNext, 180); };
   u.onend = next;
-  u.onerror = e => { if (e && (e.error === 'interrupted' || e.error === 'canceled')) return; next(); };
+  u.onerror = e => {
+    clearTimeout(watchdog);
+    const err = e && e.error;
+    if (err === 'interrupted' || err === 'canceled' || my !== token) return;
+    if (err === 'not-allowed'){ failed('請再按一次「朗讀」按鈕。'); return; }
+    errCount++;
+    if (useVoice && voice){ useVoice = false; setTimeout(() => { if (my === token && playing){ token++; speakNext(); } }, 200); return; }  // 換預設語音重唸
+    if (errCount >= 3){ failed(noVoiceMsg()); return; }
+    next();
+  };
   if (synth.paused) synth.resume();
   synth.speak(u);
+  // 4 秒內完全沒開始發聲：先原樣重試，再換預設語音，仍不行就顯示說明
+  watchdog = setTimeout(() => {
+    if (started || synth.speaking || my !== token || !playing) return;
+    retry++;
+    if (retry === 1){ token++; synth.cancel(); setTimeout(speakNext, 250); }
+    else if (retry === 2 && useVoice && voice){ useVoice = false; token++; synth.cancel(); setTimeout(speakNext, 250); }
+    else failed(noVoiceMsg());
+  }, 4000);
+}
+function noVoiceMsg(){
+  return '手機沒有發出聲音。請用 Chrome 開啟本頁；若還是沒聲音，請到手機「設定 → 文字轉語音」安裝「中文（台灣）」語音。';
+}
+function failed(msg){
+  token++; playing = false; paused = false; if (synth) synth.cancel();
+  updateButtons(); setStatus(msg); alert(msg);
 }
 function start(list, i){
   if (!synth){ alert('這個瀏覽器不支援朗讀，請改用 Chrome 或 Safari 開啟。'); return; }
   if (!voice) pickVoice();
-  token++;
+  token++; clearTimeout(watchdog); errCount = 0; retry = 0;
   chunks = list; ci = i || 0; playing = true; paused = false; updateButtons();
-  if (synth.speaking || synth.pending){ synth.cancel(); setTimeout(speakNext, 200); }  // 先停乾淨再唸，避免爆音
-  else speakNext();
+  synth.cancel();                               // 先停掉前一句
+  speakNext();                                  // 直接在按鈕當下開始唸（Android 需要）
 }
 function playAll(){ start(buildChunks(blocks), 0); }
 function playSection(id){ start(buildChunks(Array.from(document.getElementById(id).querySelectorAll('.rd'))), 0); }
@@ -640,7 +704,7 @@ function togglePause(){
   else playAll();
 }
 function stopAll(){
-  token++; playing = false; paused = false;
+  token++; clearTimeout(watchdog); playing = false; paused = false;
   if (synth) synth.cancel();
   updateButtons(); setStatus('點任何一段文字，就會從那裡開始唸');
 }
@@ -654,6 +718,17 @@ const rateEl = document.getElementById('rate');
 rateEl.addEventListener('input', () => { rate = parseFloat(rateEl.value); document.getElementById('rateTxt').textContent = rate.toFixed(1); });
 rateEl.addEventListener('change', () => { if (playing) start(chunks, ci); });
 
+let vol = 0.8;
+const volEl = document.getElementById('vol');
+volEl.addEventListener('change', () => { vol = parseFloat(volEl.value); if (playing) start(chunks, ci); });
+document.getElementById('voiceSel').addEventListener('change', e => {
+  const v = zhVoices[parseInt(e.target.value, 10)];
+  if (!v) return;
+  voice = v; useVoice = true; chosenName = v.name;
+  try { localStorage.setItem('voiceName', v.name); } catch(err) {}
+  if (playing) start(chunks, ci);
+  else { start([{el: blocks[0], t: '你好，這是我的聲音。'}], 0); }   // 試聽
+});
 let fs = 21;
 function fontSize(d){ fs = Math.min(30, Math.max(17, fs + d*2)); document.documentElement.style.setProperty('--fs', fs + 'px'); }
 </script>
