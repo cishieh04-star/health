@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>起床猛灌水竟傷眼？揭開青光眼 4 大地雷</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4fafa; --paper:#ffffff; --ink:#22313a; --muted:#5e6f78;
+  --teal:#1f6f78; --teal-l:#e2f3f4; --sky:#d5ecf6; --coral:#e2674f; --coral-l:#fde9e3;
+  --gold:#f2b84b; --gold-l:#fff4dc; --green:#3c8c5a; --green-l:#e4f4e8; --line:#dcebec;
+  --fs:21px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  font-size:var(--fs);line-height:1.9;padding-bottom:170px}
+h1,h2,h3{font-family:"Noto Serif TC","Noto Serif CJK TC","PMingLiU",serif;line-height:1.4}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+b{color:#0f4f57}
+
+/* 封面 */
+.cover{background:linear-gradient(170deg,#fff7e3 0%,#e3f4f6 55%,#cfe8ee 100%);padding:40px 0 80px;text-align:center;overflow:hidden}
+.badge{display:inline-block;background:#fff;border:2px solid var(--teal);color:var(--teal);border-radius:40px;
+  padding:4px 20px;font-size:.82em;font-weight:700;letter-spacing:.12em}
+.cover h1{font-size:2.05em;font-weight:900;color:#17525a;margin:18px 0 6px;letter-spacing:.03em}
+.cover h1 em{font-style:normal;color:var(--coral)}
+.cover .sub{font-size:1.05em;color:#3f5660;margin:6px auto 10px;max-width:640px}
+.cover svg{width:100%;max-width:620px;height:auto;display:block;margin:6px auto 4px}
+.bless{margin:18px auto 4px;max-width:560px}
+.bless-short{display:inline-block;background:linear-gradient(90deg,#f2b84b,#f7cf7a);color:#4a3307;font-weight:700;
+  border-radius:40px;padding:6px 26px;font-size:1.05em;letter-spacing:.12em;box-shadow:0 4px 12px rgba(242,184,75,.35)}
+.bless-verse{margin:14px auto 0;background:rgba(255,255,255,.75);border:1.5px solid #ecd39b;border-radius:20px;
+  padding:14px 18px;font-family:"Noto Serif TC","Noto Serif CJK TC",serif;font-size:1.08em;line-height:1.8;color:#3a2f22}
+.bless-verse .ref{display:block;font-family:"Noto Sans TC",sans-serif;font-size:.78em;color:#a8740f;letter-spacing:.15em;margin-top:4px}
+@media(max-width:520px){.cover h1{font-size:1.5em}.cover .sub{font-size:.95em}.bless-short{font-size:.95em;padding:6px 18px}}
+.bigbtn{display:inline-flex;align-items:center;gap:8px;background:var(--coral);color:#fff;border:none;border-radius:44px;
+  padding:16px 34px;font-size:1.1em;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px rgba(226,103,79,.35)}
+.bigbtn:active{transform:scale(.97)}
+
+/* 使用說明 */
+.guide{background:var(--paper);border-radius:24px;margin:-48px auto 0;position:relative;z-index:2;
+  padding:26px 24px;box-shadow:0 12px 32px rgba(20,70,80,.12);border-top:7px solid var(--gold)}
+.guide h2{margin:0 0 10px;font-size:1.35em;color:#9a6a0c}
+.guide ol{margin:0;padding:0;list-style:none;counter-reset:g}
+.guide li{counter-increment:g;position:relative;padding:10px 0 10px 54px;border-bottom:1px dashed var(--line)}
+.guide li:last-child{border-bottom:none}
+.guide li::before{content:counter(g);position:absolute;left:0;top:12px;width:38px;height:38px;border-radius:50%;
+  background:var(--gold);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.key{display:inline-block;background:var(--gold-l);border:1px solid #ecd39b;border-radius:8px;padding:0 8px;font-weight:700;white-space:nowrap}
+
+/* 目錄 */
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:28px 0 6px}
+.toc a{display:block;text-decoration:none;color:var(--ink);background:var(--paper);border-radius:16px;
+  padding:14px 16px;border:1px solid var(--line);font-weight:500;line-height:1.5}
+.toc a b{display:block;color:var(--coral);font-size:.78em;letter-spacing:.12em}
+
+/* 章節 */
+section.chap{background:var(--paper);border-radius:26px;padding:30px 24px;margin:32px 0;box-shadow:0 4px 20px rgba(20,70,80,.06)}
+.chap-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
+  border-bottom:2px solid var(--line);padding-bottom:14px;margin-bottom:18px}
+.chap-no{color:var(--coral);font-weight:700;letter-spacing:.2em;font-size:.8em}
+.chap h2{margin:2px 0 0;font-size:1.55em;color:var(--teal)}
+.listen{background:var(--teal-l);color:var(--teal);border:2px solid var(--teal);border-radius:30px;padding:8px 18px;
+  font-size:.85em;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.listen:active{transform:scale(.96)}
+h3{font-size:1.22em;margin:26px 0 8px;display:flex;align-items:center;gap:10px;color:#1c3b44}
+h3 .dot{width:12px;height:12px;border-radius:50%;background:var(--coral);flex:none}
+.rd{cursor:pointer}
+p.rd{margin:8px 0}
+.fig{background:linear-gradient(180deg,#f7fcfd,#eef7f8);border-radius:20px;padding:12px;margin:14px 0;border:1px solid var(--line)}
+.fig svg{width:100%;height:auto;display:block}
+.cap{text-align:center;font-size:.8em;color:var(--muted);margin-top:4px}
+.card{border-radius:18px;padding:16px 18px;margin:14px 0;border:1px solid var(--line);background:#fbfefe}
+.card.good{background:var(--green-l);border-color:#bfe2c9}
+.card.warn{background:var(--coral-l);border-color:#f4c7ba}
+.card.tip{background:var(--gold-l);border-color:#f0dcaa}
+.card h4{margin:0 0 4px;font-size:1.05em;display:flex;gap:8px;align-items:center}
+.stat{display:flex;align-items:center;gap:18px;border-radius:18px;padding:16px 20px;margin:12px 0;
+  background:linear-gradient(90deg,var(--teal-l),#fff)}
+.stat .n{font-family:"Noto Serif TC","Noto Serif CJK TC",serif;font-size:2.3em;font-weight:900;color:var(--teal);line-height:1;white-space:nowrap}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.three{grid-template-columns:1fr}}
+.three .card{margin:0}
+.three .card.best{border:2.5px solid var(--green);background:var(--green-l)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:10px 0}
+.steps li{counter-increment:s;position:relative;padding:10px 12px 10px 56px;margin:8px 0;background:var(--teal-l);border-radius:14px}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:10px;width:34px;height:34px;border-radius:50%;
+  background:var(--teal);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.mine{border:2px solid #f1d3c9;border-radius:22px;padding:18px;margin:22px 0;background:#fffaf8}
+.mine-tag{display:inline-block;background:var(--coral);color:#fff;font-weight:700;border-radius:10px;padding:2px 12px;font-size:.8em;letter-spacing:.1em}
+.mine h3{margin-top:8px}
+.note{font-size:.85em;color:var(--muted)}
+.end{background:#eef6f7;text-align:center;border-radius:18px;padding:18px;margin-top:26px;font-size:.92em}
+
+/* 播放列 */
+.player{position:fixed;left:0;right:0;bottom:0;background:rgba(23,50,58,.97);color:#fff;z-index:50;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -6px 22px rgba(0,0,0,.22)}
+.player .row{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center}
+.pbtn{background:#36565f;color:#fff;border:none;border-radius:12px;padding:11px 14px;font-size:17px;font-weight:700;
+  cursor:pointer;font-family:inherit;min-width:76px}
+.pbtn.main{background:var(--gold);color:#2a2a2a}
+.pbtn:disabled{opacity:.4}
+.speed{display:flex;align-items:center;gap:6px;font-size:16px}
+.speed input{width:110px;accent-color:var(--gold)}
+.status{text-align:center;font-size:14px;opacity:.8;margin:4px auto 0;max-width:860px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+
+<!-- ===================== 首頁 ===================== -->
+<header class="cover" id="top">
+  <div class="wrap">
+    <span class="badge">健康小刊物・眼睛保健</span>
+    <div class="bless">
+      <div class="bless-short">✨ 願主光照你的眼睛 ✨</div>
+      <div class="bless-verse rd" data-say="我願你凡事興盛，身體健壯，正如你的靈魂興盛一樣。">
+        「我願你凡事興盛，身體健壯，<br>正如你的靈魂興盛一樣。」
+        <span class="ref">約翰三書 1:2</span>
+      </div>
+    </div>
+    <h1 class="rd" id="coverTitle" data-say="起床猛灌水，竟然會傷眼？揭開青光眼的四大地雷。">起床猛灌水竟傷眼？<br>揭開青光眼 <em>4 大地雷</em></h1>
+    <p class="sub">青光眼常在不知不覺中發生。<br>認識風險、按時治療、避開日常地雷，守護視力。</p>
+
+    <svg viewBox="0 0 640 380" aria-hidden="true">
+      <defs>
+        <radialGradient id="sunG"><stop offset="0" stop-color="#ffe7a3"/><stop offset="1" stop-color="#ffe7a3" stop-opacity="0"/></radialGradient>
+        <radialGradient id="irisG" cx=".45" cy=".4"><stop offset="0" stop-color="#7fd0d6"/><stop offset=".6" stop-color="#2b8f99"/><stop offset="1" stop-color="#17565e"/></radialGradient>
+        <clipPath id="eyeClip"><path d="M40 200 Q280 30 520 200 Q280 370 40 200Z"/></clipPath>
+        <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd8f0"/><stop offset="1" stop-color="#5fb6de"/></linearGradient>
+      </defs>
+      <circle cx="540" cy="80" r="110" fill="url(#sunG)"/>
+      <circle cx="540" cy="80" r="38" fill="#ffd36b"/>
+      <!-- 眼睛 -->
+      <path d="M40 200 Q280 30 520 200 Q280 370 40 200Z" fill="#fff"/>
+      <g clip-path="url(#eyeClip)">
+        <circle cx="280" cy="200" r="92" fill="url(#irisG)"/>
+        <circle cx="280" cy="200" r="92" fill="none" stroke="#0f4148" stroke-width="5" opacity=".5"/>
+        <circle cx="280" cy="200" r="40" fill="#0f2c31"/>
+        <circle cx="306" cy="172" r="17" fill="#fff"/>
+        <circle cx="256" cy="226" r="7" fill="#fff" opacity=".75"/>
+      </g>
+      <path d="M40 200 Q280 30 520 200 Q280 370 40 200Z" fill="none" stroke="#1f6f78" stroke-width="10" stroke-linejoin="round"/>
+      <g stroke="#1f6f78" stroke-width="7" stroke-linecap="round">
+        <line x1="100" y1="163" x2="80" y2="138"/><line x1="160" y1="136" x2="146" y2="106"/><line x1="220" y1="121" x2="213" y2="88"/>
+        <line x1="280" y1="115" x2="280" y2="80"/><line x1="340" y1="121" x2="347" y2="88"/><line x1="400" y1="136" x2="414" y2="106"/><line x1="460" y1="163" x2="480" y2="138"/>
+      </g>
+      <!-- 水杯 -->
+      <g transform="translate(500,215)">
+        <path d="M0 0 L100 0 L88 150 L12 150Z" fill="#eaf6fb" stroke="#4a9fc4" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M5 30 L95 30 L88 147 L12 147Z" fill="url(#waterG)" opacity=".9"/>
+        <path d="M14 42 q16 -8 30 0 t30 0" stroke="#fff" stroke-width="4" fill="none" opacity=".7"/>
+        <circle cx="94" cy="-20" r="24" fill="#e2674f"/>
+        <text x="94" y="-10" font-size="32" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">!</text>
+      </g>
+      <!-- 水滴 -->
+      <path d="M470 120 q14 22 0 32 q-14 -10 0 -32Z" fill="#5fb6de"/>
+      <path d="M445 160 q10 16 0 23 q-10 -7 0 -23Z" fill="#9fd8f0"/>
+    </svg>
+
+    <button class="bigbtn" onclick="playAll()">🔊 從頭開始朗讀</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- 使用說明（不朗讀） -->
+  <div class="guide">
+    <h2>📖 使用說明</h2>
+    <ol>
+      <li>按上方紅色的 <span class="key">🔊 從頭開始朗讀</span>，就會從第一章一路唸到最後。</li>
+      <li>每一章右上角都有 <span class="key">🔊 聽這一章</span>，只想聽某一章，按它就好。</li>
+      <li>用手指<b>點任何一段文字</b>，就會從那一段開始唸，畫面會跟著捲動。</li>
+      <li>畫面最下方是控制列：<span class="key">⏸ 暫停</span> <span class="key">▶ 繼續</span> <span class="key">⏹ 停止</span>，拉動 <span class="key">🐢 速度 🐇</span> 可調慢或調快。</li>
+      <li>字太小？按控制列的 <span class="key">字＋</span> <span class="key">字－</span> 調整大小。</li>
+      <li>按了沒聲音？請確認手機<b>不是靜音</b>、音量已打開；用 LINE 打開沒聲音時，請點右上角改用<b>手機瀏覽器</b>開啟。</li>
+    </ol>
+  </div>
+
+  <nav class="toc">
+    <a href="#c1"><b>第一章</b>成因與家族遺傳</a>
+    <a href="#c2"><b>第二章</b>眼藥水與手術</a>
+    <a href="#c3"><b>第三章</b>自我觀察與檢查</a>
+    <a href="#c4"><b>第四章</b>青光眼 4 大地雷</a>
+  </nav>
+
+  <!-- ===================== 第一章 ===================== -->
+  <section class="chap" id="c1">
+    <div class="chap-head">
+      <div><div class="chap-no">CHAPTER 1・第一章</div>
+        <h2 class="rd" data-say="第一章，青光眼的成因，與家族遺傳風險。">青光眼的成因與家族遺傳風險</h2></div>
+      <button class="listen" onclick="playSection('c1')">🔊 聽這一章</button>
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 640 310" aria-hidden="true">
+        <text x="165" y="32" font-size="22" font-weight="700" fill="#1f6f78" text-anchor="middle">年紀越大，機會越高</text>
+        <line x1="40" y1="260" x2="290" y2="260" stroke="#9bbcc1" stroke-width="3"/>
+        <rect x="70" y="222" width="80" height="38" rx="10" fill="#9fd3d8"/>
+        <rect x="185" y="96" width="80" height="164" rx="10" fill="#e2674f"/>
+        <text x="110" y="210" font-size="20" font-weight="700" fill="#1f6f78" text-anchor="middle">約 1.75%</text>
+        <text x="225" y="84" font-size="24" font-weight="900" fill="#e2674f" text-anchor="middle">約 9%</text>
+        <text x="110" y="292" font-size="20" fill="#22313a" text-anchor="middle">40 歲</text>
+        <text x="225" y="292" font-size="20" fill="#22313a" text-anchor="middle">70 歲</text>
+        <line x1="330" y1="20" x2="330" y2="295" stroke="#dcebec" stroke-width="3" stroke-dasharray="6 8"/>
+        <text x="490" y="32" font-size="22" font-weight="700" fill="#1f6f78" text-anchor="middle">家族遺傳要留意</text>
+        <path d="M440 150 L440 172 L580 172 L580 150 M510 172 L510 196" stroke="#9bbcc1" stroke-width="4" fill="none"/>
+        <g transform="translate(440,80)"><circle r="22" fill="#e2674f"/><rect x="-26" y="26" width="52" height="44" rx="20" fill="#e2674f"/></g>
+        <g transform="translate(580,80)"><circle r="22" fill="#9fd3d8"/><rect x="-26" y="26" width="52" height="44" rx="20" fill="#9fd3d8"/></g>
+                <g transform="translate(510,214)"><circle r="17" fill="#1f6f78"/><rect x="-20" y="20" width="40" height="34" rx="16" fill="#1f6f78"/></g>
+        <text x="374" y="96" font-size="16" font-weight="700" fill="#e2674f" text-anchor="middle">父或母</text>
+        <text x="374" y="116" font-size="16" font-weight="700" fill="#e2674f" text-anchor="middle">有青光眼</text>
+        <text x="490" y="296" font-size="19" font-weight="900" fill="#1f6f78" text-anchor="middle">子女風險約 7～9 倍</text>
+      </svg>
+    </div>
+
+    <h3 class="rd"><span class="dot"></span>年齡與盛行率</h3>
+    <p class="rd" data-say="青光眼的發生率，會隨著年齡增加而上升。四十歲左右，機會大約是百分之一點七五；到了七十歲左右，可能升到大約百分之九。">青光眼的發生率會隨年齡增加而上升：<b>40 歲</b>左右約 <b>1.75%</b>，到了 <b>70 歲</b>左右，可能升到約 <b>9%</b>。</p>
+
+    <h3 class="rd"><span class="dot"></span>原發性與次發性</h3>
+    <p class="rd" data-say="臨床上，大約百分之九十，屬於找不到明確單一原因的原發性青光眼。">臨床上約 <b>90%</b> 屬於找不到明確單一誘因的「<b>原發性</b>」青光眼。</p>
+    <p class="rd" data-say="少數是次發性青光眼，可能和糖尿病、眼內出血、虹彩炎、外傷、近視加深，或長期使用類固醇有關。">少數為「<b>次發性</b>」，可能與糖尿病、眼內出血、虹彩炎、外傷、近視加深，或長期使用類固醇有關。</p>
+
+    <h3 class="rd" data-say="家族史，與查驗家族病史。"><span class="dot"></span>家族史與「查驗家族病史」</h3>
+    <p class="rd" data-say="直系血親，例如父母，如果有青光眼，罹患的風險可能比一般人高出大約七到九倍。">直系血親（如父母）若有青光眼，罹患風險可能比一般人高出約 <b>7 到 9 倍</b>。</p>
+    <p class="rd" data-say="如果兄弟姊妹檢查出青光眼，建議查驗家族病史，了解父母是否也有青光眼。實務上觀察，父母其中一方也有青光眼的比例，可以達到大約百分之三十，顯示有相當的遺傳傾向。">若兄弟姊妹檢查出青光眼，建議「<b>查驗家族病史</b>」，了解父母是否也有青光眼。實務觀察中，父母任一方患病的比例可達約 <b>30%</b>，顯示具相當的遺傳傾向。</p>
+    <div class="card tip rd" data-say="小提醒：家中有人確診青光眼，其他家人也建議一起做眼科檢查。">
+      <h4>💡 小提醒</h4>家中有人確診青光眼，其他家人也建議一起做眼科檢查。
+    </div>
+  </section>
+
+  <!-- ===================== 第二章 ===================== -->
+  <section class="chap" id="c2">
+    <div class="chap-head">
+      <div><div class="chap-no">CHAPTER 2・第二章</div>
+        <h2 class="rd" data-say="第二章，治療方式：眼藥水，與手術的演進。">治療方式：眼藥水與手術演進</h2></div>
+      <button class="listen" onclick="playSection('c2')">🔊 聽這一章</button>
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 640 270" aria-hidden="true">
+        <!-- 眼藥水 -->
+        <text x="140" y="34" font-size="21" font-weight="700" fill="#1f6f78" text-anchor="middle">約九成靠眼藥水控制</text>
+        <g transform="translate(140,60)">
+          <rect x="-16" y="0" width="32" height="26" rx="6" fill="#e2674f"/>
+          <path d="M-12 26 L12 26 L6 52 L-6 52Z" fill="#fff" stroke="#9bbcc1" stroke-width="3"/>
+          <rect x="-48" y="52" width="96" height="120" rx="26" fill="#fff" stroke="#1f6f78" stroke-width="5"/>
+          <rect x="-34" y="92" width="68" height="44" rx="8" fill="#e2f3f4"/>
+          <text x="0" y="122" font-size="18" font-weight="700" fill="#1f6f78" text-anchor="middle">降眼壓</text>
+        </g>
+        <path d="M210 70 q12 20 0 28 q-12 -8 0 -28Z" fill="#5fb6de"/>
+        <path d="M228 110 q9 15 0 21 q-9 -6 0 -21Z" fill="#9fd8f0"/>
+        <text x="140" y="258" font-size="18" fill="#22313a" text-anchor="middle">按時點藥，不要中斷</text>
+        <!-- 滾雪球 -->
+        <line x1="300" y1="20" x2="300" y2="255" stroke="#dcebec" stroke-width="3" stroke-dasharray="6 8"/>
+        <text x="470" y="34" font-size="21" font-weight="700" fill="#e2674f" text-anchor="middle">後期惡化像滾雪球</text>
+        <path d="M330 80 L620 230 L620 250 L330 250Z" fill="#e2f3f4"/>
+        <path d="M330 80 L620 230" stroke="#9bbcc1" stroke-width="4"/>
+        <circle cx="362" cy="84" r="12" fill="#fff" stroke="#9bbcc1" stroke-width="3"/>
+        <circle cx="452" cy="122" r="24" fill="#fff" stroke="#9bbcc1" stroke-width="3"/>
+        <circle cx="565" cy="166" r="42" fill="#fff" stroke="#9bbcc1" stroke-width="3"/>
+        <path d="M380 70 q20 -12 40 0" stroke="#e2674f" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M478 96 q24 -14 48 0" stroke="#e2674f" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <text x="470" y="258" font-size="18" fill="#22313a" text-anchor="middle">中期以前評估治療較好</text>
+      </svg>
+    </div>
+
+    <h3 class="rd" data-say="藥物治療，與依從性的挑戰。"><span class="dot"></span>藥物治療與「依從性」挑戰</h3>
+    <p class="rd" data-say="臨床上，大約百分之九十的青光眼，可以透過降眼壓的眼藥水來控制。">臨床上約 <b>90%</b> 的青光眼，可透過<b>降眼壓眼藥水</b>控制。</p>
+    <p class="rd">但眼藥水可能帶來眼睛不舒服或乾眼等副作用，若沒有充分說明，部分患者容易中斷點藥。</p>
+    <p class="rd" data-say="呂醫師提到，台北榮總的研究指出，第一年沒有持續用藥的比例，可以達到百分之五十。">呂醫師提到，台北榮總的研究指出，<b>第一年未用藥比例可達 50%</b>。</p>
+    <div class="card warn rd" data-say="注意：一旦沒有好好控制，視野缺損可能逐步擴大，甚至失明。請依照醫師指示，按時點藥。">
+      <h4>⚠️ 注意</h4>一旦未妥善控制，視野缺損可能逐步擴大，甚至<b>失明</b>。請依醫囑按時點藥。
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 640 345" aria-hidden="true">
+        <!-- 眼球剖面 -->
+        <circle cx="330" cy="180" r="125" fill="#fff" stroke="#1f6f78" stroke-width="6"/>
+        <path d="M222 118 Q160 180 222 242" fill="#e2f3f4" stroke="#1f6f78" stroke-width="5"/>
+        <path d="M228 120 L228 160 M228 200 L228 240" stroke="#2b8f99" stroke-width="12" stroke-linecap="round"/>
+        <ellipse cx="252" cy="180" rx="18" ry="44" fill="#d5ecf6" stroke="#7fb3c8" stroke-width="3"/>
+        <rect x="450" y="160" width="150" height="40" rx="12" fill="#f2b84b"/>
+        <text x="540" y="225" font-size="19" font-weight="700" fill="#a8740f" text-anchor="middle">視神經</text>
+        <!-- 眼壓箭頭 -->
+        <g stroke="#e2674f" stroke-width="5" fill="none" stroke-linecap="round">
+          <path d="M360 180 L425 180"/><path d="M412 168 L428 180 L412 192"/>
+          <path d="M350 130 L405 155"/><path d="M350 230 L405 205"/>
+        </g>
+        <text x="330" y="337" font-size="18" fill="#e2674f" text-anchor="middle" font-weight="700">眼壓太高，會壓迫視神經</text>
+        <!-- 房水與排水管道 -->
+        <text x="120" y="186" font-size="18" fill="#1f6f78" text-anchor="middle" font-weight="700">房水</text><path d="M142 180 L195 180" stroke="#1f6f78" stroke-width="2.5"/>
+        <path d="M218 122 C 205 70, 260 40, 330 42 C 400 44, 430 60, 445 50" stroke="#3c8c5a" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="2 0"/>
+        <path d="M218 122 C 205 70, 260 40, 330 42 C 400 44, 430 60, 445 50" stroke="#bfe2c9" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="10 12"/>
+        <path d="M262 50 q8 13 0 18 q-8 -5 0 -18Z" fill="#5fb6de"/>
+        <path d="M355 34 q8 13 0 18 q-8 -5 0 -18Z" fill="#5fb6de"/>
+        <path d="M430 40 q8 13 0 18 q-8 -5 0 -18Z" fill="#5fb6de"/>
+        <text x="520" y="54" font-size="19" font-weight="700" fill="#3c8c5a" text-anchor="middle">手術開排水管道</text>
+        <text x="520" y="80" font-size="16" fill="#3c8c5a" text-anchor="middle">讓房水順利排出</text>
+      </svg>
+      <div class="cap">示意圖：手術幫眼睛多開一條「排水管道」</div>
+    </div>
+
+    <h3 class="rd" data-say="手術原理，與滾雪球效應。"><span class="dot"></span>手術原理與「滾雪球效應」</h3>
+    <p class="rd">降眼壓手術就像在眼球上方開闢<b>排水管道</b>或引流，讓房水順利排出，避免視神經持續受壓。</p>
+    <p class="rd">青光眼到了後期，惡化速度容易加快，就像<b>滾雪球</b>一樣。因此通常建議在視神經受損還不太深、大約<b>超過中期之前</b>就評估介入，以減緩惡化速度，保留有生之年的視力。</p>
+
+    <h3 class="rd" data-say="手術的演進，與內引外流。"><span class="dot"></span>手術演進與「內引外流」</h3>
+    <div class="three">
+      <div class="card rd" data-say="傳統小樑切除術：開口比較大，手術後可能出現眼壓過低，導致視力驟降的風險，恢復期也比較長。">
+        <h4>🔪 傳統小樑切除術</h4>開口較大，術後可能眼壓過低、視力驟降，恢復期較長。
+      </div>
+      <div class="card rd" data-say="微創支架：傷口小，但是降壓的幅度有時候有限。">
+        <h4>🔹 微創支架</h4>傷口小，但降壓幅度有時有限。
+      </div>
+      <div class="card best rd" data-say="內引外流：結合內部支架引流，加上縮小版的外部排水通道，大約是原來的三分之一到四分之一，兼顧降壓效果，傷口負擔也比較小。">
+        <h4>✅ 內引外流</h4>結合內部支架引流＋縮小版外部排水通道（約原來的 <b>1/3～1/4</b>），兼顧降壓效果與較小傷口。
+      </div>
+    </div>
+    <p class="rd" data-say="多數患者大約兩週到六週，可以逐步恢復正常；一般休息大約兩天，就可以上班。但仍然需要依照醫師指示，按時點藥大約兩個月。">多數患者約 <b>兩週至六週</b>可逐步恢復正常，一般休息約 <b>兩天</b>即可上班（仍需依醫囑按時點藥約<b>兩個月</b>）。</p>
+  </section>
+
+  <!-- ===================== 第三章 ===================== -->
+  <section class="chap" id="c3">
+    <div class="chap-head">
+      <div><div class="chap-no">CHAPTER 3・第三章</div>
+        <h2 class="rd" data-say="第三章，日常自我觀察，與定期檢查。">日常自我觀察與定期檢查</h2></div>
+      <button class="listen" onclick="playSection('c3')">🔊 聽這一章</button>
+    </div>
+
+    <div class="fig">
+      <svg viewBox="0 0 640 300" aria-hidden="true">
+        <defs>
+          <radialGradient id="fieldG"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d5ecf6"/></radialGradient>
+          <filter id="blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="10"/></filter>
+        </defs>
+        <!-- 臉與遮眼的手 -->
+        <circle cx="160" cy="150" r="100" fill="#ffe3cc"/>
+        <path d="M80 110 Q160 30 240 110" fill="#5b4636"/>
+        <ellipse cx="125" cy="145" rx="14" ry="17" fill="#2f2a24"/>
+        <circle cx="130" cy="139" r="5" fill="#fff"/>
+        <path d="M125 205 Q160 228 195 205" stroke="#c46b4f" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <g transform="translate(200,150) rotate(-12)">
+          <rect x="-48" y="-40" width="92" height="74" rx="30" fill="#f6c7a3" stroke="#d99a70" stroke-width="3"/>
+          <path d="M-30 -40 v-26 M-10 -42 v-32 M10 -42 v-30 M28 -38 v-22" stroke="#f6c7a3" stroke-width="18" stroke-linecap="round"/>
+          <path d="M-30 -40 v-26 M-10 -42 v-32 M10 -42 v-30 M28 -38 v-22" stroke="#d99a70" stroke-width="2" stroke-linecap="round" opacity=".0"/>
+        </g>
+        <text x="160" y="284" font-size="19" font-weight="700" fill="#1f6f78" text-anchor="middle">輪流遮住一隻眼睛</text>
+        <!-- 視野 -->
+        <circle cx="480" cy="140" r="115" fill="url(#fieldG)" stroke="#9bbcc1" stroke-width="3"/>
+        <line x1="365" y1="140" x2="595" y2="140" stroke="#9bbcc1" stroke-width="2" stroke-dasharray="6 8"/>
+        <line x1="480" y1="25" x2="480" y2="255" stroke="#9bbcc1" stroke-width="2" stroke-dasharray="6 8"/>
+        <circle cx="425" cy="85" r="42" fill="#6b7f86" opacity=".55" filter="url(#blur)"/>
+        <circle cx="480" cy="140" r="11" fill="#e2674f"/>
+        <text x="500" y="133" font-size="16" fill="#e2674f" font-weight="700">定點</text>
+        <text x="480" y="284" font-size="19" font-weight="700" fill="#1f6f78" text-anchor="middle">餘光有沒有模糊、被擋住？</text>
+      </svg>
+    </div>
+
+    <h3 class="rd"><span class="dot"></span>單眼遮蔽自我測試</h3>
+    <p class="rd" data-say="兩隻眼睛一起看東西時，會互相代償，所以平常不容易發現單眼的視野變化。">兩眼一起看東西時會互相「<b>代償</b>」，所以平時不容易察覺單眼的視野變化。</p>
+    <ol class="steps">
+      <li class="rd" data-say="步驟一，輪流遮住一隻眼睛。">輪流<b>遮住一隻眼睛</b></li>
+      <li class="rd" data-say="步驟二，注視前方一個固定的點。">注視<b>前方一個定點</b></li>
+      <li class="rd" data-say="步驟三，用眼角的餘光，留意上下左右有沒有模糊，或被擋住的感覺。">用<b>餘光</b>留意上下左右，有沒有模糊或被擋住的感覺</li>
+    </ol>
+    <p class="rd note" data-say="影片中也提到，視網膜剝離和青光眼，在看東西的表現上有所不同；實際診斷，仍然要靠專業檢查。">影片中也提到視網膜剝離與青光眼在視覺表現上的差異；實際診斷仍須仰賴專業檢查。</p>
+
+    <h3 class="rd"><span class="dot"></span>定期眼科檢查</h3>
+    <div class="stat rd" data-say="建議過了三十五歲以後，每年做一次眼科檢查，建立自己的基準資料。">
+      <div class="n">35<span style="font-size:.45em">歲+</span></div>
+      <div>建議過了 35 歲後，<b>每年做一次</b>眼科檢查，建立自己的基準資料。</div>
+    </div>
+    <p class="rd" data-say="如果醫師評估有疑似青光眼的跡象，可以依照健保規範檢查；如果只是想建立基準資料，也可以和醫師討論自費檢查的項目，方便長期追蹤，看看有沒有退化變化。">若經醫師評估有疑似青光眼跡象，可依<b>健保規範</b>檢查；若只是想建立基準資料（baseline），也可和醫師討論<b>自費檢查</b>項目，以便長期追蹤是否有退化變化。</p>
+  </section>
+
+  <!-- ===================== 第四章 ===================== -->
+  <section class="chap" id="c4">
+    <div class="chap-head">
+      <div><div class="chap-no">CHAPTER 4・第四章</div>
+        <h2 class="rd" data-say="第四章，青光眼的四大地雷：狂喝水、重訓憋氣，以及日常行為對眼壓的影響。">青光眼 4 大地雷：狂喝水、重訓與日常行為</h2></div>
+      <button class="listen" onclick="playSection('c4')">🔊 聽這一章</button>
+    </div>
+
+    <!-- 地雷 1 -->
+    <div class="mine">
+      <span class="mine-tag">地雷 1</span>
+      <h3 class="rd" data-say="地雷一，短時間大量喝水。">💧 短時間大量喝水</h3>
+      <div class="fig">
+        <svg viewBox="0 0 640 260" aria-hidden="true">
+          <!-- 大杯 -->
+          <g transform="translate(70,40)">
+            <path d="M0 0 L140 0 L124 180 L16 180Z" fill="#eaf6fb" stroke="#4a9fc4" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M5 14 L135 14 L124 177 L16 177Z" fill="#7fc7e6"/>
+            <text x="70" y="110" font-size="28" font-weight="900" fill="#fff" text-anchor="middle">500</text>
+            <text x="70" y="138" font-size="18" fill="#fff" text-anchor="middle">c.c.</text>
+            <circle cx="150" cy="-6" r="26" fill="#e2674f"/>
+            <path d="M139 -17 L161 5 M161 -17 L139 5" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <text x="140" y="248" font-size="19" font-weight="700" fill="#e2674f" text-anchor="middle">3～5 分鐘猛灌 ✗</text>
+          <line x1="320" y1="20" x2="320" y2="240" stroke="#dcebec" stroke-width="3" stroke-dasharray="6 8"/>
+          <!-- 小杯 -->
+          <g fill="#eaf6fb" stroke="#4a9fc4" stroke-width="4" stroke-linejoin="round">
+            <path d="M370 110 L430 110 L424 200 L376 200Z"/><path d="M450 110 L510 110 L504 200 L456 200Z"/><path d="M530 110 L590 110 L584 200 L536 200Z"/>
+          </g>
+          <g fill="#9fd8f0"><path d="M373 140 L427 140 L424 198 L376 198Z"/><path d="M453 140 L507 140 L504 198 L456 198Z"/><path d="M533 140 L587 140 L584 198 L536 198Z"/></g>
+          <circle cx="480" cy="62" r="26" fill="#3c8c5a"/>
+          <path d="M468 62 L477 72 L494 52" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="480" y="248" font-size="19" font-weight="700" fill="#3c8c5a" text-anchor="middle">每次 100～150 c.c. 分次喝 ✓</text>
+        </svg>
+      </div>
+      <p class="rd" data-say="如果在三到五分鐘內，喝下五百西西左右的水，水分快速進入身體和眼睛裡，排水來不及，青光眼患者的眼壓，可能上升大約十左右。">若在 <b>3 到 5 分鐘</b>內喝下 <b>500 c.c.</b> 左右的水，水分快速進入體內與眼內、排水不及，青光眼患者眼壓可能上升<b>約 10 左右</b>。</p>
+      <div class="card good rd" data-say="建議：青光眼患者要分次喝水，每次大約一百到一百五十西西，避免一早起床，就猛灌五百到一千西西。">
+        <h4>✅ 建議</h4>分次喝水，每次約 <b>100～150 c.c.</b>，避免一早起床就猛灌 500～1,000 c.c.。
+      </div>
+    </div>
+
+    <!-- 地雷 2 -->
+    <div class="mine">
+      <span class="mine-tag">地雷 2</span>
+      <h3 class="rd" data-say="地雷二，重量訓練時憋氣。">🏋️ 重量訓練與憋氣</h3>
+      <div class="fig">
+        <svg viewBox="0 0 640 250" aria-hidden="true">
+          <!-- 憋氣舉重 -->
+          <g transform="translate(160,0)">
+            <rect x="-110" y="44" width="220" height="10" rx="5" fill="#5e6f78"/>
+            <rect x="-122" y="22" width="20" height="54" rx="6" fill="#36565f"/><rect x="102" y="22" width="20" height="54" rx="6" fill="#36565f"/>
+            <path d="M-40 52 L-34 150 M40 52 L34 150" stroke="#f6c7a3" stroke-width="14" stroke-linecap="round"/>
+            <circle cx="0" cy="104" r="30" fill="#f7a58f"/>
+            <circle cx="-17" cy="114" r="9" fill="#f08a73"/><circle cx="17" cy="114" r="9" fill="#f08a73"/>
+            <path d="M-10 98 h6 M4 98 h6" stroke="#2f2a24" stroke-width="4" stroke-linecap="round"/>
+            <path d="M-6 120 h12" stroke="#2f2a24" stroke-width="4" stroke-linecap="round"/>
+            <rect x="-32" y="134" width="64" height="70" rx="22" fill="#1f6f78"/>
+            <path d="M-16 204 L-22 236 M16 204 L22 236" stroke="#36565f" stroke-width="14" stroke-linecap="round"/>
+            <text x="64" y="112" font-size="20" font-weight="900" fill="#e2674f">憋氣 ✗</text>
+          </g>
+          <line x1="330" y1="20" x2="330" y2="235" stroke="#dcebec" stroke-width="3" stroke-dasharray="6 8"/>
+          <!-- 正常呼吸 -->
+          <g transform="translate(480,0)">
+            <rect x="-90" y="44" width="180" height="10" rx="5" fill="#5e6f78"/>
+            <rect x="-100" y="30" width="16" height="38" rx="5" fill="#36565f"/><rect x="84" y="30" width="16" height="38" rx="5" fill="#36565f"/>
+            <path d="M-40 52 L-34 150 M40 52 L34 150" stroke="#f6c7a3" stroke-width="14" stroke-linecap="round"/>
+            <circle cx="0" cy="104" r="30" fill="#ffe3cc"/>
+            <path d="M-10 98 h6 M4 98 h6" stroke="#2f2a24" stroke-width="4" stroke-linecap="round"/>
+            <ellipse cx="0" cy="118" rx="6" ry="7" fill="#c46b4f"/>
+            <rect x="-32" y="134" width="64" height="70" rx="22" fill="#3c8c5a"/>
+            <path d="M-16 204 L-22 236 M16 204 L22 236" stroke="#36565f" stroke-width="14" stroke-linecap="round"/>
+            <path d="M40 116 q14 -6 28 0 M44 128 q14 -6 28 0" stroke="#7fc7e6" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <text x="0" y="22" font-size="19" font-weight="900" fill="#3c8c5a" text-anchor="middle">記得呼吸 ✓</text>
+          </g>
+        </svg>
+      </div>
+      <p class="rd" data-say="用力憋氣，例如上廁所時用力解便，或是重訓時憋氣，會讓胸腔和腹腔的壓力上升，影響靜脈回流，造成眼壓短暫升高。">用力憋氣（如解便用力、重訓時憋氣，又稱 Valsalva 動作）會使<b>胸腹腔壓力上升</b>、影響靜脈回流，造成眼壓短暫升高。</p>
+      <div class="card good rd" data-say="青光眼患者，不是完全不能做重訓，但要避免長時間憋氣。">
+        <h4>✅ 建議</h4>青光眼患者<b>並非完全不能重訓</b>，但要避免長時間憋氣。
+      </div>
+    </div>
+
+    <!-- 地雷 3 -->
+    <div class="mine">
+      <span class="mine-tag">地雷 3</span>
+      <h3 class="rd" data-say="地雷三，潛水、倒立，與長時間低頭看手機。">📱 潛水、倒立與長時間低頭看手機</h3>
+      <div class="fig">
+        <svg viewBox="0 0 640 250" aria-hidden="true">
+          <!-- 低頭 -->
+          <g>
+            <path d="M120 230 L120 150 Q122 120 150 105" stroke="#e2674f" stroke-width="40" fill="none" stroke-linecap="round"/>
+            <circle cx="182" cy="112" r="30" fill="#ffe3cc"/>
+            <path d="M160 92 Q182 74 208 96" stroke="#5b4636" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <circle cx="192" cy="120" r="4" fill="#2f2a24"/>
+            <path d="M140 150 L196 176" stroke="#f6c7a3" stroke-width="12" stroke-linecap="round"/>
+            <rect x="194" y="168" width="44" height="26" rx="5" fill="#36565f" transform="rotate(20 216 181)"/>
+            <path d="M196 132 L212 166" stroke="#e2674f" stroke-width="3" stroke-dasharray="4 5"/>
+            <text x="110" y="40" font-size="20" font-weight="900" fill="#e2674f">低頭滑手機 ✗</text>
+            <text x="110" y="66" font-size="17" fill="#e2674f">眼壓可能上升約 5</text>
+          </g>
+          <line x1="330" y1="20" x2="330" y2="235" stroke="#dcebec" stroke-width="3" stroke-dasharray="6 8"/>
+          <!-- 平視 -->
+          <g>
+            <path d="M440 230 L440 140" stroke="#3c8c5a" stroke-width="40" fill="none" stroke-linecap="round"/>
+            <circle cx="440" cy="94" r="30" fill="#ffe3cc"/>
+            <path d="M414 82 Q440 60 466 82" stroke="#5b4636" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <circle cx="456" cy="96" r="4" fill="#2f2a24"/>
+            <path d="M458 150 L520 112" stroke="#f6c7a3" stroke-width="12" stroke-linecap="round"/>
+            <rect x="514" y="74" width="28" height="48" rx="6" fill="#36565f"/>
+            <rect x="518" y="80" width="20" height="34" rx="3" fill="#9fd8f0"/>
+            <path d="M462 96 L512 96" stroke="#3c8c5a" stroke-width="3" stroke-dasharray="4 5"/>
+            <text x="480" y="40" font-size="20" font-weight="900" fill="#3c8c5a" text-anchor="middle">螢幕架高到視線 ✓</text>
+          </g>
+        </svg>
+      </div>
+      <p class="rd" data-say="深潛或自由潛水，因為水壓和環境壓力的變化，青光眼患者應該避免；浮潛相對比較適合，但仍然需要留意。"><b>深潛或自由潛水</b>因水壓與環境壓力變化，青光眼患者應避免（浮潛相對較適宜，但仍需留意）。</p>
+      <p class="rd"><b>倒立</b>或頭部低於心臟的姿勢，受重力影響，眼壓可能明顯上升。</p>
+      <p class="rd" data-say="長時間低頭滑手機或看平板，也可能讓眼壓上升大約五左右。">長時間<b>低頭滑手機或看平板</b>，也可能使眼壓上升約 <b>5 左右</b>。</p>
+      <div class="card good rd" data-say="建議：把螢幕架高到和視線一樣的高度，既護眼，也能減輕脖子的負擔。">
+        <h4>✅ 建議</h4>把螢幕<b>架高到水平視線高度</b>，既護眼，也減輕頸部負擔。
+      </div>
+    </div>
+
+    <!-- 地雷 4 -->
+    <div class="mine">
+      <span class="mine-tag">地雷 4</span>
+      <h3 class="rd" data-say="地雷四，熬夜，與暴飲暴食。">🌙 熬夜與暴飲暴食</h3>
+      <div class="fig">
+        <svg viewBox="0 0 640 250" aria-hidden="true">
+          <!-- 熬夜 -->
+          <rect x="20" y="20" width="280" height="190" rx="22" fill="#2c4766"/>
+          <path d="M120 60 a46 46 0 1 0 50 70 a38 38 0 1 1 -50 -70Z" fill="#ffe08a"/>
+          <g fill="#fff"><circle cx="230" cy="58" r="4"/><circle cx="260" cy="100" r="3"/><circle cx="60" cy="170" r="3"/><circle cx="250" cy="170" r="4"/><circle cx="60" cy="60" r="3"/></g>
+          <g transform="translate(230,150)"><circle r="34" fill="#fff"/><path d="M0 0 L0 -22 M0 0 L-16 8" stroke="#2c4766" stroke-width="5" stroke-linecap="round"/></g>
+          <text x="160" y="240" font-size="19" font-weight="900" fill="#e2674f" text-anchor="middle">熬夜 ✗</text>
+          <!-- 五色蔬果 -->
+          <rect x="340" y="20" width="280" height="190" rx="22" fill="#fff4dc"/>
+          <circle cx="410" cy="70" r="30" fill="#f2b84b"/>
+          <g stroke="#f2b84b" stroke-width="5" stroke-linecap="round"><path d="M410 28 v-6 M452 70 h6 M362 70 h6 M440 40 l5 -5 M380 40 l-5 -5"/></g>
+          <path d="M370 140 Q480 230 590 140Z" fill="#fff" stroke="#d6b77a" stroke-width="4"/>
+          <circle cx="420" cy="138" r="17" fill="#e2674f"/><circle cx="452" cy="130" r="15" fill="#3c8c5a"/>
+          <circle cx="484" cy="136" r="16" fill="#f2b84b"/><circle cx="514" cy="130" r="14" fill="#7a4fa0"/><circle cx="542" cy="139" r="14" fill="#f4f1e8" stroke="#d6b77a" stroke-width="2"/>
+          <text x="540" y="72" font-size="17" font-weight="700" fill="#a8740f" text-anchor="middle">規律作息</text>
+          <text x="480" y="240" font-size="19" font-weight="900" fill="#3c8c5a" text-anchor="middle">五色蔬果、飲食均衡 ✓</text>
+        </svg>
+      </div>
+      <p class="rd" data-say="避免熬夜。夜間房水的分泌量，通常比白天少；熬夜不睡，可能讓一整天的房水生成量增加，排水來不及，就把眼壓推高。"><b>避免熬夜</b>：夜間房水分泌量通常低於白天，熬夜不睡可能使整日房水生成量增加、排水不及而推升眼壓。</p>
+      <p class="rd">避免<b>暴飲暴食</b>，或一次吃得過於油膩豐盛，影響眼部血流分布；並維持規律作息，預防感冒生病。</p>
+      <div class="card tip rd" data-say="營養補充：飲食上如果能均衡攝取五色蔬果，不一定需要額外補充；但現代人如果飲食比較不均衡，適量攝取維生素B、C、E、葉黃素或魚油等，也有助於保健。">
+        <h4>🥗 營養補充</h4>若能均衡攝取<b>五色蔬果</b>，不一定需要額外補充；若飲食較不均衡，適量攝取維生素 B、C、E、葉黃素或魚油等，也有助保健。
+      </div>
+    </div>
+
+    <div class="end rd" data-say="本刊內容整理自呂醫師的健康影片，僅供衛教參考。眼睛有任何不舒服或視力變化，請找眼科醫師評估；用藥與手術，請遵照醫師指示。謝謝收聽。">
+      📌 本刊內容整理自呂醫師健康影片，僅供衛教參考。<br>眼睛有任何不適或視力變化，請找眼科醫師評估；用藥與手術請遵照醫囑。
+    </div>
+  </section>
+
+  <p style="text-align:center;margin:30px 0"><a href="#top" style="color:var(--teal)">⬆ 回到首頁</a></p>
+</div>
+
+<!-- ===================== 播放控制列 ===================== -->
+<div class="player">
+  <div class="row">
+    <button class="pbtn main" id="btnPlay" onclick="togglePause()">▶ 朗讀</button>
+    <button class="pbtn" id="btnStop" onclick="stopAll()" disabled>⏹ 停止</button>
+    <div class="speed">🐢<input type="range" id="rate" min="0.6" max="1.4" step="0.1" value="0.9">🐇 <span id="rateTxt">0.9</span></div>
+    <button class="pbtn" onclick="fontSize(-1)">字－</button><button class="pbtn" onclick="fontSize(1)">字＋</button>
+  </div>
+  <div class="status" id="status">點任何一段文字，就會從那裡開始唸</div>
+</div>
+
+<script>
+/* ===== 朗讀引擎：短句分段、只用中文語音、過濾符號，避免各裝置出現怪聲 ===== */
+const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+const blocks = Array.from(document.querySelectorAll('.rd'));
+// 首頁朗讀順序：先唸標題，再唸祝福經文
+(function(){ const t = document.getElementById('coverTitle'); blocks.splice(blocks.indexOf(t), 1); blocks.unshift(t); })();
+let voice = null, rate = 0.9, chunks = [], ci = 0, playing = false, paused = false, token = 0;
+
+function pickVoice(){
+  if (!synth) return;
+  const vs = synth.getVoices();
+  const zh = vs.filter(v => /^zh|cmn/i.test(v.lang));
+  // 優先台灣國語，其次普通話；避免粵語（zh-HK）造成怪腔調
+  voice = zh.find(v => /TW/i.test(v.lang) && v.localService) || zh.find(v => /TW/i.test(v.lang)) ||
+          zh.find(v => /CN|Hans|cmn/i.test(v.lang)) || zh.find(v => !/HK|yue/i.test(v.lang)) || null;
+}
+if (synth){ synth.cancel(); pickVoice(); if ('onvoiceschanged' in synth) synth.onvoiceschanged = pickVoice; }
+
+function clean(t){
+  return t
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]/gu, '')  // 表情符號
+    .replace(/c\.c\./gi, '西西')
+    .replace(/(\d+(?:\.\d+)?)\s*%/g, '百分之$1')
+    .replace(/[～~]/g, '到')
+    .replace(/[「」『』《》【】"“”'‘’]/g, '')
+    .replace(/[（(]/g, '，').replace(/[）)]/g, '，')
+    .replace(/[＋+]/g, '加').replace(/[✓✗×＊*#_=<>|\/\\^`•・]/g, ' ')
+    .replace(/[A-Za-z]{4,}/g, '')                                     // 長英文字不唸，避免怪腔
+    .replace(/\s+/g, ' ')
+    .replace(/[，、\s]*([，。！？；：])[，、\s]*/g, '$1')
+    .replace(/^[，。、；：\s]+/, '').trim();
+}
+function split(t){
+  const out = [];
+  t.split(/(?<=[。！？；])/).forEach(s => {
+    s = s.trim(); if (!s) return;
+    while (s.length > 48){                      // 太長的句子在逗號處切開，避免 Chrome 唸到一半中斷
+      let cut = s.lastIndexOf('，', 46); if (cut < 10) cut = 46;
+      out.push(s.slice(0, cut + 1)); s = s.slice(cut + 1).trim();
+    }
+    if (s.replace(/[，。！？；：\s]/g,'').length) out.push(s);
+  });
+  return out;
+}
+function buildChunks(els){
+  const list = [];
+  els.forEach(el => split(clean(el.dataset.say || el.innerText)).forEach(t => list.push({el, t})));
+  return list;
+}
+
+function setStatus(t){ document.getElementById('status').textContent = t; }
+function updateButtons(){
+  document.getElementById('btnPlay').textContent = playing ? '⏸ 暫停' : (paused ? '▶ 繼續' : '▶ 朗讀');
+  document.getElementById('btnStop').disabled = !playing && !paused;
+}
+function inView(el){ const r = el.getBoundingClientRect(); return r.top > 60 && r.bottom < innerHeight - 150; }
+
+function speakNext(){
+  if (!playing) return;
+  if (ci >= chunks.length){ stopAll(); setStatus('朗讀完畢，謝謝收聽'); return; }
+  const {el, t} = chunks[ci], my = ++token;
+  if (!inView(el)) el.scrollIntoView({behavior:'smooth', block:'center'});
+  setStatus('正在朗讀：' + t);
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = voice ? voice.lang : 'zh-TW'; if (voice) u.voice = voice;
+  u.rate = rate; u.pitch = 1; u.volume = 1;
+  const next = () => { if (my !== token || !playing) return; ci++; setTimeout(speakNext, 180); };
+  u.onend = next;
+  u.onerror = e => { if (e && (e.error === 'interrupted' || e.error === 'canceled')) return; next(); };
+  if (synth.paused) synth.resume();
+  synth.speak(u);
+}
+function start(list, i){
+  if (!synth){ alert('這個瀏覽器不支援朗讀，請改用 Chrome 或 Safari 開啟。'); return; }
+  if (!voice) pickVoice();
+  token++;
+  chunks = list; ci = i || 0; playing = true; paused = false; updateButtons();
+  if (synth.speaking || synth.pending){ synth.cancel(); setTimeout(speakNext, 200); }  // 先停乾淨再唸，避免爆音
+  else speakNext();
+}
+function playAll(){ start(buildChunks(blocks), 0); }
+function playSection(id){ start(buildChunks(Array.from(document.getElementById(id).querySelectorAll('.rd'))), 0); }
+function playFrom(el){
+  const all = buildChunks(blocks);
+  start(all, Math.max(0, all.findIndex(c => c.el === el)));
+}
+function togglePause(){
+  if (playing){ playing = false; paused = true; token++; synth.cancel(); updateButtons(); setStatus('已暫停，按「繼續」接著唸'); }
+  else if (paused){ start(chunks, ci); }
+  else playAll();
+}
+function stopAll(){
+  token++; playing = false; paused = false;
+  if (synth) synth.cancel();
+  updateButtons(); setStatus('點任何一段文字，就會從那裡開始唸');
+}
+blocks.forEach(el => el.addEventListener('click', e => { if (!e.target.closest('button,a')) playFrom(el); }));
+
+// 切到別的 App 或關閉頁面時停止，避免背景殘留怪聲
+document.addEventListener('visibilitychange', () => { if (document.hidden && playing) togglePause(); });
+window.addEventListener('pagehide', () => { if (synth) synth.cancel(); });
+
+const rateEl = document.getElementById('rate');
+rateEl.addEventListener('input', () => { rate = parseFloat(rateEl.value); document.getElementById('rateTxt').textContent = rate.toFixed(1); });
+rateEl.addEventListener('change', () => { if (playing) start(chunks, ci); });
+
+let fs = 21;
+function fontSize(d){ fs = Math.min(30, Math.max(17, fs + d*2)); document.documentElement.style.setProperty('--fs', fs + 'px'); }
+</script>
+</body>
+</html>
