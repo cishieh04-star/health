@@ -549,7 +549,7 @@ p.rd{margin:8px 0}
   </div>
   <div class="row" style="margin-top:6px">
     <label class="speed">🗣️ 聲音 <select id="voiceSel"><option>自動選擇</option></select></label>
-    <div class="speed">🔈<input type="range" id="vol" min="0.3" max="1" step="0.1" value="0.8">🔊</div>
+    <div class="speed">🔈<input type="range" id="vol" min="0.3" max="1" step="0.1" value="0.9">🔊</div>
   </div>
   <div class="status" id="status">點任何一段文字，就會從那裡開始唸</div>
 </div>
@@ -567,11 +567,13 @@ const synth = ('speechSynthesis' in window) ? window.speechSynthesis : null;
 const blocks = Array.from(document.querySelectorAll('.rd'));
 // 首頁朗讀順序：先唸標題，再唸祝福經文
 (function(){ const t = document.getElementById('coverTitle'); blocks.splice(blocks.indexOf(t), 1); blocks.unshift(t); })();
-let voice = null, rate = 0.9, chunks = [], ci = 0, playing = false, paused = false, token = 0;
+let vol = 0.9, voice = null, rate = 0.9, chunks = [], ci = 0, playing = false, paused = false, token = 0;
 
 function normLang(l){ return (l || '').replace(/_/g, '-'); }
 let zhVoices = [], chosenName = '';
 try { chosenName = localStorage.getItem('voiceName') || ''; } catch(e) {}
+let keep = [], errCount = 0, watchdog = null, retry = 0, cands = [], candIdx = 0, userChose = !!chosenName;
+const isAndroid = /Android/i.test(navigator.userAgent || '');
 function voiceScore(v){
   const l = normLang(v.lang), n = v.name || '';
   let sc = 0;
@@ -593,6 +595,7 @@ function pickVoice(){
   zhVoices = vs.filter(v => /^(zh|cmn)/i.test(normLang(v.lang)) && !/HK|yue/i.test(normLang(v.lang)))
                .sort((a, b) => voiceScore(b) - voiceScore(a));
   voice = zhVoices.find(v => v.name === chosenName) || zhVoices[0] || null;
+  cands = [];
   const sel = document.getElementById('voiceSel');
   if (sel){
     sel.innerHTML = zhVoices.length ? '' : '<option>手機預設</option>';
@@ -640,42 +643,65 @@ function updateButtons(){
 }
 function inView(el){ const r = el.getBoundingClientRect(); return r.top > 60 && r.bottom < innerHeight - 150; }
 
-let keep = [], useVoice = true, errCount = 0, watchdog = null, retry = 0;
+// 候選聲音順序：一個沒聲音就自動換下一個；最後用手機預設聲音
+function buildCands(){
+  const others = zhVoices.filter(v => v !== voice);
+  if (isAndroid && !userChose) cands = [null].concat(voice ? [voice] : [], others);   // Android 先用手機預設，最穩定
+  else cands = (voice ? [voice] : []).concat(others, [null]);
+  candIdx = 0;
+}
+function curVoice(){ return cands.length ? cands[Math.min(candIdx, cands.length - 1)] : null; }
+function tryNextVoice(){
+  if (candIdx < cands.length - 1){ candIdx++; return true; }
+  return false;
+}
 function speakNext(){
   if (!playing) return;
   if (ci >= chunks.length){ stopAll(); setStatus('朗讀完畢，謝謝收聽'); return; }
   const {el, t} = chunks[ci], my = ++token;
   if (!inView(el)) el.scrollIntoView({behavior:'smooth', block:'center'});
   setStatus('正在朗讀：' + t);
+  const v = curVoice();
   const u = new SpeechSynthesisUtterance(t);
-  u.lang = (useVoice && voice) ? normLang(voice.lang) : 'zh-TW';
-  if (useVoice && voice) u.voice = voice;
+  u.lang = v ? normLang(v.lang) : 'zh-TW';
+  if (v) u.voice = v;
   u.rate = rate; u.pitch = 1; u.volume = vol;
-  keep.push(u); if (keep.length > 5) keep.shift();          // Android：避免語句被回收，唸完一句就停住
-  let started = false;
+  keep.push(u); if (keep.length > 5) keep.shift();          // Android：避免語句被回收
+  let started = false, t0 = 0;
   u.onstart = () => { started = true; errCount = 0; retry = 0; clearTimeout(watchdog); };
   const next = () => { clearTimeout(watchdog); if (my !== token || !playing) return; ci++; setTimeout(speakNext, 180); };
-  u.onend = next;
+  const retrySame = () => { if (my !== token || !playing) return; token++; synth.cancel(); setTimeout(speakNext, 250); };
+  u.onend = () => {
+    if (my !== token || !playing) return;
+    // 「唸完」得太快 = 其實沒發出聲音（這個聲音在手機上不能用）→ 換下一個聲音重唸同一句
+    const dur = Date.now() - t0, chars = t.replace(/[，。！？；：、\s]/g, '').length;
+    if (chars >= 4 && dur < Math.min(700, chars * 60)){
+      errCount++;
+      if (tryNextVoice()){ setStatus('正在換一個聲音試試看…'); retrySame(); return; }
+      if (errCount >= 2){ failed(noVoiceMsg()); return; }
+    } else { errCount = 0; }
+    next();
+  };
   u.onerror = e => {
     clearTimeout(watchdog);
     const err = e && e.error;
     if (err === 'interrupted' || err === 'canceled' || my !== token) return;
     if (err === 'not-allowed'){ failed('請再按一次「朗讀」按鈕。'); return; }
     errCount++;
-    if (useVoice && voice){ useVoice = false; setTimeout(() => { if (my === token && playing){ token++; speakNext(); } }, 200); return; }  // 換預設語音重唸
-    if (errCount >= 3){ failed(noVoiceMsg()); return; }
-    next();
+    if (tryNextVoice()){ retrySame(); return; }
+    failed(noVoiceMsg());
   };
   if (synth.paused) synth.resume();
+  t0 = Date.now();
   synth.speak(u);
-  // 4 秒內完全沒開始發聲：先原樣重試，再換預設語音，仍不行就顯示說明
+  // 5 秒內完全沒開始：先重試，再換聲音，仍不行就顯示說明
   watchdog = setTimeout(() => {
     if (started || synth.speaking || my !== token || !playing) return;
     retry++;
-    if (retry === 1){ token++; synth.cancel(); setTimeout(speakNext, 250); }
-    else if (retry === 2 && useVoice && voice){ useVoice = false; token++; synth.cancel(); setTimeout(speakNext, 250); }
+    if (retry === 1) retrySame();
+    else if (tryNextVoice()) retrySame();
     else failed(noVoiceMsg());
-  }, 4000);
+  }, 5000);
 }
 function noVoiceMsg(){
   return '手機沒有發出聲音。請用 Chrome 開啟本頁；若還是沒聲音，請到手機「設定 → 文字轉語音」安裝「中文（台灣）」語音。';
@@ -687,7 +713,7 @@ function failed(msg){
 function start(list, i){
   if (!synth){ alert('這個瀏覽器不支援朗讀，請改用 Chrome 或 Safari 開啟。'); return; }
   if (!voice) pickVoice();
-  token++; clearTimeout(watchdog); errCount = 0; retry = 0;
+  token++; clearTimeout(watchdog); errCount = 0; retry = 0; if (!cands.length) buildCands();
   chunks = list; ci = i || 0; playing = true; paused = false; updateButtons();
   synth.cancel();                               // 先停掉前一句
   speakNext();                                  // 直接在按鈕當下開始唸（Android 需要）
@@ -718,13 +744,12 @@ const rateEl = document.getElementById('rate');
 rateEl.addEventListener('input', () => { rate = parseFloat(rateEl.value); document.getElementById('rateTxt').textContent = rate.toFixed(1); });
 rateEl.addEventListener('change', () => { if (playing) start(chunks, ci); });
 
-let vol = 0.8;
 const volEl = document.getElementById('vol');
 volEl.addEventListener('change', () => { vol = parseFloat(volEl.value); if (playing) start(chunks, ci); });
 document.getElementById('voiceSel').addEventListener('change', e => {
   const v = zhVoices[parseInt(e.target.value, 10)];
   if (!v) return;
-  voice = v; useVoice = true; chosenName = v.name;
+  voice = v; chosenName = v.name; userChose = true; buildCands();
   try { localStorage.setItem('voiceName', v.name); } catch(err) {}
   if (playing) start(chunks, ci);
   else { start([{el: blocks[0], t: '你好，這是我的聲音。'}], 0); }   // 試聽
